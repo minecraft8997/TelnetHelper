@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TelnetHelper:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TelnetHelper_jar</output-path>
+    <root id="archive" name="TelnetHelper.jar">
+      <element id="module-output" name="TelnetHelper" />
+    </root>
+  </artifact>
+</component>
