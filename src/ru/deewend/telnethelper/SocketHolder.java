@@ -10,7 +10,6 @@ public class SocketHolder {
     public long lastTestedIfAlive;
 
     public boolean thisIsMainMenu;
-    public long lastSentMainMenuData;
     public byte[] cachedOriginalMainMenuPacket;
     public int cachedConnectionsCountPreviouslySent;
     public int cachedMainMenuInjectPosition;

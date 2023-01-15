@@ -94,7 +94,6 @@ public class HandlerThread extends Thread {
 
                         if (!holder.thisIsMainMenu) {
                             holder.thisIsMainMenu = true;
-                            holder.lastSentMainMenuData = currentTimeMillis;
                             holder.cachedOriginalMainMenuPacket = packet;
                             holder.cachedMainMenuInjectPosition = initialLength;
                         }
