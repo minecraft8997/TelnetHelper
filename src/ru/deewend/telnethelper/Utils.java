@@ -9,9 +9,8 @@ import java.util.Date;
 
 public class Utils {
     private static final Format DATE_FORMAT_1 =
-            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final Format DATE_FORMAT_2 =
-            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    private static final Format DATE_FORMAT_2 = (Format) DATE_FORMAT_1.clone();
 
     private Utils() {
     }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class HandlerThread extends Thread {
     public static final int MAX_ACTIVE_CONNECTIONS_COUNT = 100;
-    public static final int TICK_RATE = 20;
+    public static final int TICK_RATE = 25;
     public static final int TICK_INTERVAL_MS = 1000 / TICK_RATE;
     public static final int READ_TIMEOUT = 420_000;
 
@@ -54,7 +54,7 @@ public class HandlerThread extends Thread {
                     if (Utils.delta(holder.lastReadTimestamp) >= READ_TIMEOUT) {
                         close(holder);
 
-                        return;
+                        continue;
                     }
                 }
 
@@ -65,13 +65,13 @@ public class HandlerThread extends Thread {
 
                     int initialLength = packet.length;
                     boolean needToSendGameTitle = false;
-                    if (!holder.sentCurrentActiveConnectionsCount) {
-                        int position = analyzeServerPacket(packet);
-                        if (position != -1) {
-                            initialLength = position;
-                            needToSendGameTitle = true;
-                        }
+
+                    int position = analyzeServerPacket(packet);
+                    if (position != -1) {
+                        initialLength = position;
+                        needToSendGameTitle = true;
                     }
+
                     holder.outputStream.write(packet, 0, initialLength);
                     if (needToSendGameTitle) {
                         byte[] toInject = String.format(
@@ -90,8 +90,6 @@ public class HandlerThread extends Thread {
                 } else {
                     if (Utils.delta(holder.lastServerReadTimestamp) >= READ_TIMEOUT) {
                         close(holder);
-
-                        return;
                     }
                 }
             } catch (IOException e) {
@@ -151,7 +149,8 @@ public class HandlerThread extends Thread {
         }
     }
 
-    private void close(SocketHolder holder) {
+    private void close(SocketHolder holder) { // do not change this param to index int
+        // to prevent issues in case this method gets called multiple times with the same i
         Utils.close(holder.socket);
         Utils.close(holder.serverSocket);
         synchronized (this) {

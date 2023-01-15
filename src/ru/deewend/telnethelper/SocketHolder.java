@@ -12,7 +12,6 @@ public class SocketHolder {
     public final Socket socket;
     public final InputStream inputStream;
     public final OutputStream outputStream;
-    public boolean sentCurrentActiveConnectionsCount;
     public long lastReadTimestamp;
 
     public /* final */ Socket serverSocket;
