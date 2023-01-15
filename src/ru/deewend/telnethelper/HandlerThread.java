@@ -166,7 +166,10 @@ public class HandlerThread extends Thread {
                 if (delta < TICK_INTERVAL_MS) {
                     Thread.sleep(TICK_INTERVAL_MS - delta);
                 } else {
-                    Thread.yield();
+                    Thread.sleep(0);
+                    // Using this instead of Thread.yield() to make it able
+                    // to catch interruption requests as well... which are never
+                    // issued (at least in this version)
                 }
             }
         } catch (Throwable t) {
