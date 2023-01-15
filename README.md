@@ -16,3 +16,19 @@ scratch. It did not look that hard though, just always wanted to try this out at
 If you continue asking such questions & being against my infrastructure solutions, you will
 be BANNED on my super secret Minecraft: Java Edition server. Just tell me your IP, so I can
 blacklist it.
+## Building
+Step 1. Ensure you have Java 8 installed.
+
+Step 2. Download the project.
+
+Step 3. Import it into IntelliJ IDEA.
+
+Step 4. File -> Project Structure -> Artifacts -> Add -> JAR -> From modules with dependencies...
+
+Step 5. Select the main class to `ru.deewend.telnethelper.Main`, press OK.
+
+Step 6. Press Apply.
+
+Step 7. Build -> Build Artifacts... -> TelnetHelper:jar -> Build.
+
+Step 8. Your jarfile will be located in the `out/artifacts/TelnetHelper_jar` folder, enjoy! <3

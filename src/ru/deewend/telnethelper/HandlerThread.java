@@ -30,16 +30,32 @@ public class HandlerThread extends Thread {
     }
 
     private synchronized void tick() {
-        for (int i = clientList.size() - 1; i >= 0; i--) {
+        int clientListSize = clientList.size();
+        for (int i = clientListSize - 1; i >= 0; i--) {
             SocketHolder holder = clientList.get(i);
+            long currentTimeMillis = System.currentTimeMillis();
             try {
-                if (System.currentTimeMillis() - holder.lastTestedIfAlive >= 1500) {
+                if (currentTimeMillis - holder.lastTestedIfAlive >= 1500) {
                     holder.outputStream.write('\0');
                     holder.outputStream.flush();
                     holder.serverOutputStream.write('\0');
                     holder.serverOutputStream.flush();
 
-                    holder.lastTestedIfAlive = System.currentTimeMillis();
+                    holder.lastTestedIfAlive = currentTimeMillis;
+                }
+                if (
+                        holder.thisIsMainMenu &&
+                        holder.cachedConnectionsCountPreviouslySent != clientListSize
+                ) {
+                    byte[] packet = holder.cachedOriginalMainMenuPacket;
+                    int position = holder.cachedMainMenuInjectPosition;
+                    int delta = packet.length - position;
+
+                    holder.outputStream.write(packet, 0, position);
+                    inject(holder);
+                    holder.outputStream.write(packet, position, delta);
+
+                    holder.cachedConnectionsCountPreviouslySent = clientListSize;
                 }
 
                 int availableFromClient, availableFromServer;
@@ -49,7 +65,7 @@ public class HandlerThread extends Thread {
                     holder.inputStream.read(packet);
                     holder.serverOutputStream.write(packet);
                     holder.serverOutputStream.flush();
-                    holder.lastReadTimestamp = System.currentTimeMillis();
+                    holder.lastReadTimestamp = currentTimeMillis;
                 } else {
                     if (Utils.delta(holder.lastReadTimestamp) >= READ_TIMEOUT) {
                         close(holder);
@@ -74,19 +90,26 @@ public class HandlerThread extends Thread {
 
                     holder.outputStream.write(packet, 0, initialLength);
                     if (needToSendGameTitle) {
-                        byte[] toInject = String.format(
-                                Messages.ACTIVE_CONNECTIONS_COUNT_STRING_FORMAT,
-                                clientList.size()
-                        ).getBytes(StandardCharsets.US_ASCII);
+                        inject(holder);
 
-                        holder.outputStream.write(toInject);
+                        if (!holder.thisIsMainMenu) {
+                            holder.thisIsMainMenu = true;
+                            holder.lastSentMainMenuData = currentTimeMillis;
+                            holder.cachedOriginalMainMenuPacket = packet;
+                            holder.cachedMainMenuInjectPosition = initialLength;
+                        }
+                    } else {
+                        if (holder.thisIsMainMenu) {
+                            holder.thisIsMainMenu = false;
+                            holder.cachedOriginalMainMenuPacket = null; // free memory
+                        }
                     }
                     if (initialLength < packet.length) {
                         holder.outputStream.write(packet,
                                 initialLength, (packet.length - initialLength));
                     }
                     holder.outputStream.flush();
-                    holder.lastServerReadTimestamp = System.currentTimeMillis();
+                    holder.lastServerReadTimestamp = currentTimeMillis;
                 } else {
                     if (Utils.delta(holder.lastServerReadTimestamp) >= READ_TIMEOUT) {
                         close(holder);
@@ -96,6 +119,15 @@ public class HandlerThread extends Thread {
                 close(holder);
             }
         }
+    }
+
+    private synchronized void inject(SocketHolder holder) throws IOException {
+        byte[] toInject = String.format(
+                Messages.ACTIVE_CONNECTIONS_COUNT_STRING_FORMAT,
+                clientList.size()
+        ).getBytes(StandardCharsets.US_ASCII);
+
+        holder.outputStream.write(toInject);
     }
 
     /**

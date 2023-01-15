@@ -9,6 +9,12 @@ public class SocketHolder {
     public final long creationTimestamp;
     public long lastTestedIfAlive;
 
+    public boolean thisIsMainMenu;
+    public long lastSentMainMenuData;
+    public byte[] cachedOriginalMainMenuPacket;
+    public int cachedConnectionsCountPreviouslySent;
+    public int cachedMainMenuInjectPosition;
+
     public final Socket socket;
     public final InputStream inputStream;
     public final OutputStream outputStream;
