@@ -19,7 +19,7 @@ blacklist it.
 ## How to run it?
 Simply use `java -jar TelnetHelper.jar`. Personally I would recommend using `XX:+UseG1GC`
 flag if you are on Java 8. Make sure you have Battleship server listening on port `2426`
-and is unavailable externally. The proxy is listening on `2425` port.
+and it is unavailable externally. The proxy is listening on `2425` port.
 ## Building
 Step 1. Ensure you have JDK 8 (or above) installed.
 
