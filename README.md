@@ -16,8 +16,10 @@ scratch. It did not look that hard though, just always wanted to try this out at
 If you continue asking such questions & being against my infrastructure solutions, you will
 be BANNED on my super secret Minecraft: Java Edition server. Just tell me your IP, so I can
 blacklist it.
-## Where can I check out this proxy in action?
-Hop into `telnet games.mclord.ru 2425` :)
+## How to run it?
+Simply use `java -jar TelnetHelper.jar`. Personally I would recommend using `XX:+UseG1GC`
+flag if you are on Java 8. Make sure you have Battleship server listening on port `2426`
+and is unavailable externally. The proxy is listening on `2425` port.
 ## Building
 Step 1. Ensure you have JDK 8 (or above) installed.
 
