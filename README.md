@@ -8,7 +8,8 @@
 Let's say this is an addon to
 [Igor725's Telnet Battleship game](https://github.com/igor725/telebattle) (clickable link
 to their GitHub repository) which implements counting and limiting the number of active 
-connections... being a proxy (tunnel) between clients and the origin server.
+connections... being a proxy (tunnel) between clients and the origin server. It's also able
+to kick inactive players (the read timeout for both sides is set to 7 minutes).
 ## Is this a joke?
 Maybe. At least I've finally implemented something similar to Non-blocking IO from
 scratch. It did not look that hard though, just always wanted to try this out at some point.
